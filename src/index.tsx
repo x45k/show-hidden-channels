@@ -119,8 +119,8 @@ const ShowHiddenChannels = {
       return res;
     });
 
-    Patcher.after(Messages, 'default', (_, __, res) => {
-      const channel = res.props.channel;
+    Patcher.after(Messages, 'default', (_, [props], res) => {
+      const channel = props.channel;
       if (!channel?.isHidden()) return res;
 
       const styles = StyleSheet.createThemedStyleSheet({
