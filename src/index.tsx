@@ -203,7 +203,7 @@ const ShowHiddenChannels = {
       const channel = ChannelRecord.getChannel(channelId);
       if (channel?.isHidden?.()) {
         const messages = Payloads.getOrCreate(channelId);
-        messages.loadingMore = false;
+        messages.loadingMore = true;
 
         return;
       }
