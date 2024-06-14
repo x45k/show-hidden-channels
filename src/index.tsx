@@ -119,7 +119,7 @@ const ShowHiddenChannels = {
       return res;
     });
 
-    Patcher.after(Messages, 'default', (_, [props], res) => {
+    Patcher.instead(Messages, 'default', (_, [props], res) => {
       const channel = props.channel;
       if (!channel?.isHidden()) return res;
 
