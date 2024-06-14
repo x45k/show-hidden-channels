@@ -158,18 +158,20 @@ const ShowHiddenChannels = {
         }
       });
 
-      return <View style={styles.container}>
-        <Image style={styles.image} source={LockIcon} />
-        <Text style={styles.header}>
-          This is a hidden channel.
-        </Text>
-        <Text style={styles.description}>
-          You cannot see the contents of this channel. However, you may see info by swiping to the right.
-        </Text>
-        <Text style={{ ...styles.description, ...styles.lastMessage }}>
-          Last Message sent on {this.parseSnowflake(channel.lastMessageId)}.
-        </Text>
-      </View>;
+      return (
+        <View style={styles.container}>
+          <Image style={styles.image} source={LockIcon} />
+          <Text style={styles.header}>
+            This is a hidden channel.
+          </Text>
+          <Text style={styles.description}>
+            You cannot see the contents of this channel. However, you may see info by swiping to the right.
+          </Text>
+          <Text style={{ ...styles.description, ...styles.lastMessage }}>
+            Last Message sent on {this.parseSnowflake(channel.lastMessageId)}.
+          </Text>
+        </View>
+      );
     });
 
     Patcher.after(ChannelItem, 'default', (_, [info], res) => {
@@ -201,14 +203,12 @@ const ShowHiddenChannels = {
     Patcher.unpatchAll();
   },
 
-  parseSnowflake(snowflake: string) {
+  parseSnowflake(snowflake) {
     try {
-      const id = parseInt(snowflake);
+      const id = BigInt(snowflake);
       const binary = id.toString(2).padStart(64, '0');
-      const excerpt = binary.substring(0, 42);
-      const decimal = parseInt(excerpt, 2);
-      const unix = decimal + 1420070400000;
-      return new Date(unix).toLocaleString();
+      const timestamp = parseInt(binary.substring(0, 42), 2) + 1420070400000;
+      return new Date(timestamp).toLocaleString();
     } catch (e) {
       console.error(e);
       return '(Failed to get date)';
