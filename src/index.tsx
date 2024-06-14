@@ -80,7 +80,7 @@ const ShowHiddenChannels = {
     });
 
     const unpatch = Patcher.after(View, 'render', (_, __, res) => {
-      const channel: any = findInReactTree(res, r => r.props?.channel && r.props?.isRulesChannel !== void 0);
+      const channel = findInReactTree(res, r => r.props?.channel && r.props?.isRulesChannel !== void 0);
       if (!channel) return;
 
       Patcher.after(channel.type, 'type', (_, [{ channel }], res) => {
@@ -173,7 +173,7 @@ const ShowHiddenChannels = {
     });
 
     Patcher.after(ChannelItem, 'default', (_, [info], res) => {
-      const { channel }: any = findInReactTree(info, r => r?.channel) ?? {};
+      const { channel } = findInReactTree(info, r => r?.channel) ?? {};
       if (!channel?.isHidden()) return res;
 
       const payload = findInReactTree(res, r => r !== res && Array.isArray(r.props?.children));
@@ -201,7 +201,7 @@ const ShowHiddenChannels = {
     Patcher.unpatchAll();
   },
 
-  parseSnowflake(snowflake: string) {
+  parseSnowflake(snowflake) {
     try {
       const id = parseInt(snowflake);
       const binary = id.toString(2).padStart(64, '0');
